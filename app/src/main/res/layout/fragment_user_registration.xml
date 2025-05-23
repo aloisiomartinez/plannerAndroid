@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/md_16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.ui.UserRegistrationFragment">
+    tools:context=".ui.UserRegistrationFragment">
 
     <TextView
         android:id="@+id/tvUserRegistrationTitle"
