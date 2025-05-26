@@ -8,7 +8,6 @@
     tools:context=".ui.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clHomeContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -36,7 +35,6 @@
 
             <ImageView
                 android:id="@+id/ivUserPhoto"
-                android:scaleType="centerCrop"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:contentDescription="@string/imagem_foto_do_usuario"
@@ -92,8 +90,6 @@
                     android:id="@+id/tietNewPlannerActivityDate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:hint="@string/escolha_a_data"/>
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -108,8 +104,6 @@
                     android:id="@+id/tietNewPlannerActivityTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
                     android:hint="@string/escolha_o_horario"/>
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -142,7 +136,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/md_16dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintTop_toBottomOf="@id/tvPlannerActivitiesTitle"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
