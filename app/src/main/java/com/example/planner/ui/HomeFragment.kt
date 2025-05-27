@@ -5,12 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.example.planner.R
 import com.example.planner.databinding.FragmentHomeBinding
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private val navController by lazy { findNavController() }
 
 
     override fun onCreateView(
@@ -26,6 +29,12 @@ class HomeFragment : Fragment() {
 
         with(binding) {
             //TODO: Lógica da tela de home
+            btnSaveNewPlannerActivity.setOnClickListener {
+                UpdatePlannerActivityDialogFragment().show(
+                    childFragmentManager,
+                    UpdatePlannerActivityDialogFragment.TAG
+                )
+            }
         }
     }
 
