@@ -9,7 +9,7 @@ private const val IS_USER_REGISTERED = "is_user_registered"
 
 
 class UserRegistrationLocalDataImpl(
-    private val applicationContext: Application
+    private val applicationContext: Context
 ) : UserRegistrationLocalDataSource {
 
     val userRegistrationSharedPreferences: SharedPreferences =
