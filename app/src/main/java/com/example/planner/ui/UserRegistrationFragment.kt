@@ -13,6 +13,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.planner.R
+import com.example.planner.data.utils.imageBitmapToBase64
+import com.example.planner.data.utils.imageUriToBitmap
 import com.example.planner.databinding.FragmentUserRegistrationBinding
 import com.example.planner.ui.viewmodel.UserRegistrationViewModel
 import kotlinx.coroutines.flow.collect
@@ -30,7 +32,12 @@ class UserRegistrationFragment : Fragment() {
             // URI -> NESSE CASO É O DIRETORIO PARA ENCONTRAR A IMAGEM DO DISPOSTIIVO
             if (uri != null) {
                 binding.ivAddPhoto.setImageURI(uri)
-                userRegistrationViewModel.updateProfile(image = uri.toString())
+                val imageBitmap = requireContext().imageUriToBitmap(uri)
+                imageBitmap?.let {
+                    val imageBase64 = imageBitmapToBase64(bitmap = imageBitmap)
+                    userRegistrationViewModel.updateProfile(image = imageBase64)
+                    binding.ivAddPhoto.setImageURI(uri)
+                }
             } else {
                 Toast.makeText(
                     requireContext(),
