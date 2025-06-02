@@ -1,6 +1,8 @@
 package com.example.planner.data.di
 
 import android.app.Application
+import com.example.planner.data.datasource.AuthenticationLocalDataSource
+import com.example.planner.data.datasource.AuthenticationLocalDataSourceImpl
 import com.example.planner.data.datasource.UserRegistrationLocalDataImpl
 import com.example.planner.data.datasource.UserRegistrationLocalDataSource
 
@@ -11,6 +13,10 @@ object MainServiceLocator {
 
     val userRegistrationLocalDataSource: UserRegistrationLocalDataSource by lazy {
         UserRegistrationLocalDataImpl(applicationContext = application.applicationContext)
+    }
+
+    val authenticationLocalDataSource: AuthenticationLocalDataSource by lazy {
+        AuthenticationLocalDataSourceImpl(applicationContext = application.applicationContext)
     }
 
     fun initialize(application: Application) {
