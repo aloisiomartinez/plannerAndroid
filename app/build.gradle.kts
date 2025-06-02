@@ -42,6 +42,7 @@ android {
 dependencies {
     implementation(libs.datastore)
     implementation(libs.kotlinx.serialization.json)
+    implementation(libs.datastore.preferences)
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
