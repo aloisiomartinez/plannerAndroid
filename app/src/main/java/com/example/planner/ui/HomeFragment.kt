@@ -1,11 +1,13 @@
 package com.example.planner.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -23,7 +25,7 @@ class HomeFragment : Fragment() {
 
     private val navController by lazy { findNavController() }
 
-    val userRegistrationViewModel: UserRegistrationViewModel by viewModels()
+    val userRegistrationViewModel: UserRegistrationViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -63,15 +65,11 @@ class HomeFragment : Fragment() {
                 userRegistrationViewModel.isTokenValid.distinctUntilChanged {
                     old, new -> old == new
                 }.collect { isTokenValid ->
+                    Log.d("CheckIsTokenValid", "setupObservers: isTokenValid = $isTokenValid")
                     if (isTokenValid == false) showNewTokenSnackBar()
                 }
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 
     private fun showNewTokenSnackBar() {
@@ -86,4 +84,11 @@ class HomeFragment : Fragment() {
                 )
             ).show()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+
 }
