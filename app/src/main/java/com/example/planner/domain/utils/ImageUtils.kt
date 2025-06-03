@@ -1,4 +1,4 @@
-package com.example.planner.data.utils
+package com.example.planner.domain.utils
 
 import android.graphics.Bitmap
 import android.net.Uri

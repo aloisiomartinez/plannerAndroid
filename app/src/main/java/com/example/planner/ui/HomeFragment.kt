@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.planner.R
-import com.example.planner.data.utils.imageBase64ToBitmap
+import com.example.planner.domain.utils.imageBase64ToBitmap
 import com.example.planner.databinding.FragmentHomeBinding
 import com.example.planner.ui.viewmodel.UserRegistrationViewModel
 import com.google.android.material.snackbar.Snackbar
