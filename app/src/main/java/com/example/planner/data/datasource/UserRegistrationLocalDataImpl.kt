@@ -1,12 +1,11 @@
 package com.example.planner.data.datasource
 
-import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.dataStore
-import com.example.planner.data.model.Profile
-import com.example.planner.data.model.ProfileSerializer
+import com.example.planner.domain.model.Profile
+import com.example.planner.domain.model.ProfileSerializer
 import kotlinx.coroutines.flow.Flow
 
 private const val USER_REGISTRATION_FILE_NAME = "user_registration"
