@@ -48,6 +48,7 @@ dependencies {
     //Room
     implementation(libs.room.runtime)
     implementation(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
