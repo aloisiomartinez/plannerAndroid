@@ -1,6 +1,7 @@
 package com.example.planner.data.database
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
@@ -8,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlannerActivityDao {
+
+    @Insert
+    fun insert(plannerActivityEntity: PlannerActivityEntity)
 
     @Query("Select * FROM planneractivityentity ORDER BY is_completed AND datetime")
     fun getAll(): Flow<List<PlannerActivityEntity>>
