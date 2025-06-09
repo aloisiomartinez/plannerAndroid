@@ -3,12 +3,17 @@ package com.example.planner.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.planner.core.di.MainServiceLocator
+import com.example.planner.core.di.MainServiceLocator.ioDispatcher
+import com.example.planner.core.di.MainServiceLocator.mainDispatcher
 import com.example.planner.data.datasource.PlannerActivityLocalDataSource
 import com.example.planner.domain.model.PlannerActivity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
 class PlannerActivityViewModel : ViewModel() {
@@ -22,8 +27,13 @@ class PlannerActivityViewModel : ViewModel() {
 
     init {
         viewModelScope.launch {
-            plannerActivityLocalDataSource.plannerActivities.collect { activities ->
-                _activities.value = activities
+            plannerActivityLocalDataSource.plannerActivities
+                .flowOn(ioDispatcher)
+                .collect { activities ->
+                    withContext(mainDispatcher) {
+                        _activities.value = activities
+                    }
+
             }
         }
     }
@@ -35,19 +45,35 @@ class PlannerActivityViewModel : ViewModel() {
             datetime = datetime,
             isCompleted = false
         )
-        plannerActivityLocalDataSource.insert(plannerActivity = plannerActivity)
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                plannerActivityLocalDataSource.insert(plannerActivity = plannerActivity)
+            }
+        }
     }
 
     fun update(updatedPlannerActivity: PlannerActivity) {
-        plannerActivityLocalDataSource.update(plannerActivity = updatedPlannerActivity)
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                plannerActivityLocalDataSource.update(plannerActivity = updatedPlannerActivity)
+            }
+        }
     }
 
     fun updateIsCompleted(uuid: String, isCompleted: Boolean) {
-        plannerActivityLocalDataSource.updateIsCompletedByUuid(uuid = uuid, isCompleted = isCompleted)
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                plannerActivityLocalDataSource.updateIsCompletedByUuid(uuid = uuid, isCompleted = isCompleted)
+            }
+        }
     }
 
     fun delete(uuid: String) {
-        plannerActivityLocalDataSource.deleteByUuid(uuid = uuid)
+        viewModelScope.launch {
+            withContext(ioDispatcher) {
+                plannerActivityLocalDataSource.deleteByUuid(uuid = uuid)
+            }
+        }
     }
 
 }

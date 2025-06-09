@@ -15,24 +15,24 @@ class PlannerActivityLocalDataSourceImpl(
             entities.map { entity -> entity.toDomain() }
         }
 
-    override fun insert(plannerActivity: PlannerActivity) {
+    override suspend fun insert(plannerActivity: PlannerActivity) {
         plannerActivityDao.insert(plannerActivity.toEntity(0))
     }
 
-    override fun getByUuid(uuid: String): PlannerActivity {
+    override suspend fun getByUuid(uuid: String): PlannerActivity {
         return plannerActivityDao.getByUuid(uuid).toDomain()
     }
 
-    override fun updateIsCompletedByUuid(uuid: String, isCompleted: Boolean) {
+    override suspend fun updateIsCompletedByUuid(uuid: String, isCompleted: Boolean) {
         plannerActivityDao.updateIsCompletedByUuid(uuid, isCompleted)
     }
 
-    override fun update(plannerActivity: PlannerActivity) {
+    override suspend fun update(plannerActivity: PlannerActivity) {
         val entity = plannerActivityDao.getByUuid(uuid = plannerActivity.uuid)
         plannerActivityDao.update(plannerActivityEntity = plannerActivity.toEntity(id = entity.id))
     }
 
-    override fun deleteByUuid(uuid: String) {
+    override suspend fun deleteByUuid(uuid: String) {
         plannerActivityDao.deleteByUuid(uuid)
     }
 }
