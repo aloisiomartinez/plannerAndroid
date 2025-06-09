@@ -1,4 +1,4 @@
-package com.example.planner.ui.viewmodel
+package com.example.planner.presentation.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,12 +8,14 @@ import com.example.planner.core.di.MainServiceLocator.mainDispatcher
 import com.example.planner.data.datasource.PlannerActivityLocalDataSource
 import com.example.planner.domain.model.PlannerActivity
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Calendar
 import java.util.UUID
 
 class PlannerActivityViewModel : ViewModel() {
@@ -25,20 +27,34 @@ class PlannerActivityViewModel : ViewModel() {
     private val _activities: MutableStateFlow<List<PlannerActivity>> = MutableStateFlow(emptyList())
     val activities: StateFlow<List<PlannerActivity>> = _activities.asStateFlow()
 
-    init {
+    fun fetchActivities() {
         viewModelScope.launch {
-            plannerActivityLocalDataSource.plannerActivities
-                .flowOn(ioDispatcher)
-                .collect { activities ->
-                    withContext(mainDispatcher) {
-                        _activities.value = activities
-                    }
+           launch {
+               plannerActivityLocalDataSource.plannerActivities
+                   .flowOn(ioDispatcher)
+                   .collect { activities ->
+                       withContext(mainDispatcher) {
+                           _activities.value = activities
+                       }
 
+                   }
+           }
+
+            launch {
+                delay(3_000)
+                insert(name = "Jantar", datetime = Calendar.getInstance().timeInMillis)
+
+                delay(3_000)
+                insert(name = "Academia", datetime = Calendar.getInstance().timeInMillis)
+
+                val calendar = Calendar.getInstance()
+                calendar.add(Calendar.DAY_OF_MONTH, 3)
+                insert(name = "Academia", datetime = calendar.timeInMillis)
             }
         }
     }
 
-    fun insertPlannerActivity(name: String, datetime: Long) {
+    fun insert(name: String, datetime: Long) {
         val plannerActivity = PlannerActivity(
             uuid = UUID.randomUUID().toString(),
             name = name,

@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     kotlin("plugin.serialization") version "2.1.0"
-    alias(libs.plugins.ksp)
+    id("com.google.devtools.ksp") version "2.0.21-1.0.28"
+
 }
 
 android {
@@ -41,14 +42,14 @@ android {
 }
 
 dependencies {
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
+    implementation(libs.room.ktx)
+
     implementation(libs.datastore)
-    implementation(libs.kotlinx.serialization.json)
     implementation(libs.datastore.preferences)
 
-    //Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.compiler)
-    implementation(libs.room.ktx)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)

@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity
 class PlannerActivityEntity(
-    @PrimaryKey val id: Int,
+    @PrimaryKey(autoGenerate = true)
+    val id: Int,
     val uuid: String,
     val name: String,
     val datetime: Long,
