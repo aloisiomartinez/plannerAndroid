@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
@@ -27,30 +28,64 @@ class PlannerActivityViewModel : ViewModel() {
     private val _activities: MutableStateFlow<List<PlannerActivity>> = MutableStateFlow(emptyList())
     val activities: StateFlow<List<PlannerActivity>> = _activities.asStateFlow()
 
+    private val newActivity: MutableStateFlow<NewPlannerActivity> = MutableStateFlow(
+        NewPlannerActivity())
+
+    fun updateNewActivity(
+        name: String? = null,
+        date: SetDate? = null,
+        time: SetTime? = null
+    ) {
+        if (name == null && date == null && time == null) return
+
+        newActivity.update { currentNewActivity ->
+            currentNewActivity.copy(
+                name = name ?: currentNewActivity.name,
+                date = date ?: currentNewActivity.date,
+                time = time ?: currentNewActivity.time
+            )
+        }
+    }
+
+    fun saveNewActivity(onSuccess: () -> Unit, onError: () -> Unit) {
+        newActivity.value.let { newActivity ->
+            if (newActivity.isFilled()) {
+                insert(
+                    name = newActivity.name.orEmpty(),
+                    datetime = createNewActivityFilledCalendar().timeInMillis
+                )
+
+                this@PlannerActivityViewModel.newActivity.update { NewPlannerActivity() }
+
+                onSuccess()
+            } else {
+                onError()
+            }
+        }
+    }
+
+    private fun createNewActivityFilledCalendar(): Calendar {
+        val calendar = Calendar.getInstance()
+        return calendar.apply {
+            newActivity.value.let { newActivity ->
+                set(Calendar.YEAR, newActivity.date?.year ?: 0)
+                set(Calendar.MONTH, newActivity.date?.month ?: 0)
+                set(Calendar.DAY_OF_MONTH, newActivity.date?.dayOfMonth ?: 0)
+                set(Calendar.HOUR_OF_DAY, newActivity.time?.hourOfDay ?: 0)
+                set(Calendar.MINUTE, newActivity.time?.minute ?: 0)
+            }
+        }
+    }
+
     fun fetchActivities() {
         viewModelScope.launch {
-           launch {
                plannerActivityLocalDataSource.plannerActivities
                    .flowOn(ioDispatcher)
                    .collect { activities ->
                        withContext(mainDispatcher) {
                            _activities.value = activities
                        }
-
                    }
-           }
-
-            launch {
-                delay(3_000)
-                insert(name = "Jantar", datetime = Calendar.getInstance().timeInMillis)
-
-                delay(3_000)
-                insert(name = "Academia", datetime = Calendar.getInstance().timeInMillis)
-
-                val calendar = Calendar.getInstance()
-                calendar.add(Calendar.DAY_OF_MONTH, 3)
-                insert(name = "Academia", datetime = calendar.timeInMillis)
-            }
         }
     }
 
